@@ -14,6 +14,20 @@ return [
     "products"=> "Product List",
     "add.product"=> "Add Product",
 
+    "sale" => "Sale",
+    "sales" => "Sales",
+    "orders" => "Orders List",
+    "add.order" => "Create Order",
+
+    "accounts"=> "Accounts",
+    "add.account"=> "Add Account",
+    "income"=> "Income",
+    "add.income"=> "Add Income",
+    "expense"=> "Expense",
+    "add.expense"=> "Add Expense",
+    "statements"=> "Statements",
+    
+
 
 
 ];

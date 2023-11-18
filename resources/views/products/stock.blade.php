@@ -42,7 +42,7 @@
                         <h5>Specifications: {{ $product->specification }}</h5>
                     </div>
                     <div class="float-end">
-                        <a class="btn btn-primary" href="{{route('stock.list', $product->slug)}}">Add Stocks</a>
+                        <a class="btn btn-primary" href="{{route('stock.list', $product->slug)}}">Stocks List</a>
                     </div>
                 </div>
             </div>

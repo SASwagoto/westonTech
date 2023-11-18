@@ -23,7 +23,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header justify-content-end">
-                <a href="" class="btn btn-primary">Product List</a>
+                <a href="{{route('product.list')}}" class="btn btn-primary">Product List</a>
             </div>
             <div class="card-body">
                 <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
@@ -49,7 +49,10 @@
                                 <input type="file" name="product_img" class="form-control" accept=".png, .jpg, .jpeg" onchange="document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])">
                             </div>
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" name="giftable" class="form-check-input" id="check1" value="" checked="">
+                                    <label class="form-check-label" for="check1">Giftable</label>
+                                </div>
                             </div>
                         </div>
                         <div  class="col-lg-6 col-md-6 col-sm-12">
@@ -79,6 +82,13 @@
                                 <div class="image-preview mt-3">
                                     <img id="preview" src="{{asset('assets')}}/images/preview.png" class="w-100" alt="image-previewer">
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
                     </div>

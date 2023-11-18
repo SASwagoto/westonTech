@@ -26,6 +26,14 @@ return new class extends Migration
 
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
         });
+
+        Schema::create('giftable', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->timestamps();
+            
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        });
     }
 
     /**

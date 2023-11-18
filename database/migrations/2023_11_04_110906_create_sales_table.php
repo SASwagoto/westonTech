@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_id')->unique();
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('aid');
+            $table->double('total', 10, 2)->default(0.00);
+            $table->double('payment', 10, 2)->default(0.00);
+            $table->double('due', 10, 2)->default(0.00);
+            $table->unsignedBigInteger('seller_id');
             $table->timestamps();
         });
     }

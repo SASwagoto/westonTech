@@ -11,7 +11,7 @@
 	<title>@yield('title') || {{ config('app.name', 'Laravel') }}</title>
 
 <!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="{{asset('assets')}}/images/favicon.png" >
+	<link rel="shortcut icon" type="image/png" href="{{asset('assets')}}/images/logo.png" >
 	<link href="{{asset('assets')}}/vendor/wow-master/css/libs/animate.css" rel="stylesheet">
 	@stack('css')
 	<!-- Style css -->
@@ -60,6 +60,8 @@
 
         @include('layouts.partials.footer')
 	</div>
+
+	@yield('modal')
 
     @include('sweetalert::alert')
 
