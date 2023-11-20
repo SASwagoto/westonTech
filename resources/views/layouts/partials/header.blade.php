@@ -2,8 +2,11 @@
     <a href="{{route('dashboard')}}" class="">
 
         <div class="d-flex justify-content-center align-items-center mt-3">
+            @if ($siteInfo->app_logo)
+            <img src="{{asset('storage/site/'.$siteInfo->app_logo)}}" alt="Weston Tech" height="45">
+            @else
             <img src="{{asset('assets')}}/images/logo.png" alt="Weston Tech" height="45">
-
+            @endif
         </div>
     </a>
 
@@ -109,11 +112,11 @@
 
                                     </div>
                                     <div class="card-body p-3">
-                                        <a href="app-profile.html" class="dropdown-item ai-icon">
+                                        <a href="{{route('profile.edit')}}" class="dropdown-item ai-icon">
                                             <i class="fa-solid fa-user"></i>
                                             <span class="ms-2">Profile </span>
                                         </a>
-                                        <a href="javascript:void(0);" class="dropdown-item ai-icon">
+                                        <a href="{{route('settings.index')}}" class="dropdown-item ai-icon">
                                             <i class="fa-solid fa-gear"></i>
                                             <span class="ms-2">Settings </span>
                                         </a>

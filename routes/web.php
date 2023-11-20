@@ -8,6 +8,7 @@ use App\Http\Controllers\LangController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,11 +79,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [AccountController::class, 'create'])->name('acc.create');
         Route::post('/store', [AccountController::class, 'store'])->name('acc.store');
         Route::delete('/delete', [AccountController::class, 'destroy'])->name('acc.delete');
-        Route::get('/statements', [AccountController::class,'statments'])->name('acc.stats');
+        Route::get('/statements/{id}', [AccountController::class,'statments'])->name('acc.stats');
         Route::get('/incomes', [AccountController::class,'incomes'])->name('acc.incomes');
         Route::post('/income/create', [AccountController::class,'addIncome'])->name('acc.addIncome');
         Route::get('/expenses', [AccountController::class,'expenses'])->name('acc.expenses');
         Route::post('/expense/create', [AccountController::class,'addExpense'])->name('acc.addExpense');
+    });
+
+    Route::prefix('settings')->group(function (){
+        Route::get('/site', [SiteController::class,'index'])->name('settings.index');
+    Route::post('/site/{site}', [SiteController::class,'update'])->name('settings.update');
     });
 });
 

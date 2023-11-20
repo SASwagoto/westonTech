@@ -39,7 +39,7 @@
                                 <td>{{$acc->bank_name}}</td>
                                 <td class="text-end fw-bold">{{number_format($acc->balance, 2)}}</td>
                                 <td class="d-flex justify-content-end">
-                                    <a href="#"><i class="fa-solid fa-file-invoice-dollar fa-xl"></i></a>
+                                    <a href="{{route('acc.stats', $acc->id)}}"><i class="fa-solid fa-file-invoice-dollar fa-xl"></i></a>
                                     @if ($acc->acc_type != 'Cash (Default)')
                                     <a href="javascript:void(0);" onclick="document.getElementById('deleteForm{{$key+1}}').submit();" class="ms-2"><i class="fa-solid fa-trash fa-xl text-danger"></i></a>
                                     @endif

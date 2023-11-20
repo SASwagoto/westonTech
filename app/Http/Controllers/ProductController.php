@@ -41,7 +41,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
         $validator =  Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'specification' => 'nullable|string',
@@ -70,7 +69,12 @@ class ProductController extends Controller
 
             $product->product_img = $imageName;
             $product->save();
-        } 
+        }
+        if($request->giftable == 1)
+        {
+            $product->isGiftable = 1;
+            $product->save();
+        }
 
         Alert::success($product->name, 'Added Successfully');
         return redirect()->route('stock.add', $product->slug);

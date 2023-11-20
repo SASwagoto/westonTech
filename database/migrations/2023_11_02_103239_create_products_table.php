@@ -21,19 +21,13 @@ return new class extends Migration
             $table->unsignedInteger('stocks')->default(0);
             $table->double('purchase_price', 10, 2);
             $table->string('product_img')->nullable();
+            $table->boolean('isGiftable')->default(false);
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('set null');
         });
 
-        Schema::create('giftable', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->timestamps();
-            
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-        });
     }
 
     /**

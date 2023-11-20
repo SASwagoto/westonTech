@@ -50,7 +50,7 @@
                             </div>
                             <div class="mb-3">
                                 <div class="form-check mb-2">
-                                    <input type="checkbox" name="giftable" class="form-check-input" id="check1" value="" checked="">
+                                    <input type="checkbox" name="giftable" class="form-check-input" id="check1" value="1" checked="">
                                     <label class="form-check-label" for="check1">Giftable</label>
                                 </div>
                             </div>

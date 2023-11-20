@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
+    public function __construct()
+    {
+        
+    }
     /**
      * Display a listing of the resource.
      */
@@ -69,6 +73,19 @@ class AccountController extends Controller
     public function update(Request $request, Account $account)
     {
         //
+    }
+
+    public function statments($id)
+    {
+        $acc = DB::table('accounts')->where('id', $id)->first();
+        $stats = DB::table('statements')
+        ->where('statements.aid', $id)
+        ->leftJoin('incomes', 'statements.income_id', '=', 'incomes.id')
+        ->leftJoin('expenses', 'statements.expense_id', '=', 'expenses.id')
+        ->select('statements.*', 'incomes.source', 'incomes.description as idesc', 'expenses.payee', 'expenses.description as edesc')
+        ->get();
+
+        return view('accounts.statement', compact('stats', 'acc'));
     }
 
     /**

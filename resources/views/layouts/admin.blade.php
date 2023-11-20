@@ -11,7 +11,11 @@
 	<title>@yield('title') || {{ config('app.name', 'Laravel') }}</title>
 
 <!-- FAVICONS ICON -->
+	@if ($siteInfo->fav_icon)
+	<link rel="shortcut icon" type="image/png" href="{{asset('storage/site/'.$siteInfo->fav_icon)}}" >
+	@else
 	<link rel="shortcut icon" type="image/png" href="{{asset('assets')}}/images/logo.png" >
+	@endif
 	<link href="{{asset('assets')}}/vendor/wow-master/css/libs/animate.css" rel="stylesheet">
 	@stack('css')
 	<!-- Style css -->
@@ -20,9 +24,9 @@
 
     <style>
         .footer{
-            position: fixed;
             bottom: 0px;
             width: 100%;
+			margin-top: 10px;
         }
         .dropdown.bootstrap-select.swal2-select.dropdown.bootstrap-select.swal2-select{
             display: none;

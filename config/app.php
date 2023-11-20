@@ -168,6 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\InfoServiceProvider::class,
 
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
