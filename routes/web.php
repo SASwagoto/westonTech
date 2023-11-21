@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +52,14 @@ Route::middleware('auth')->group(function () {
         Route::post('store', [SupplierController::class, 'store'])->name('sup.store');
     });
 
+    Route::prefix('customer')->group(function (){
+        Route::get('/list', [CustomerController::class, 'index'])->name('customer.list');
+        Route::get('/add', [CustomerController::class, 'create'])->name('customer.create');
+        Route::post('/store', [CustomerController::class, 'store'])->name('customer.store');
+        Route::get('/get-customer', [CustomerController::class, 'getCustomer'])->name('getCustomer');
+
+    });
+
     Route::prefix('product')->group(function () {
         Route::get('list', [ProductController::class,'index'])->name('product.list');
         Route::get('add', [ProductController::class, 'create'])->name('product.add');
@@ -65,6 +76,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/list', [OrderController::class,'index'])->name('order.list');
         Route::get('/add', [OrderController::class,'create'])->name('order.add');
         Route::post('/store', [OrderController::class,'store'])->name('order.store');
+        Route::get('/checkout/{sale}', [SaleController::class, 'show'])->name('order.checkout');
+        Route::post('/sale', [SaleController::class, 'update'])->name('order.sold');
+        Route::get('/invoice/{sale}', [InvoiceController::class, 'show'])->name('sale.invoice');
     });
 
     Route::prefix('cart')->group(function () {

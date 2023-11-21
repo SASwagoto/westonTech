@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string('invoice_id')->unique();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('aid');
+            $table->timestamp('date')->nullable();
             $table->double('total', 10, 2)->default(0.00);
             $table->double('payment', 10, 2)->default(0.00);
             $table->double('due', 10, 2)->default(0.00);
-            $table->unsignedBigInteger('seller_id');
+            $table->unsignedBigInteger('seller_id')->nullable();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class CartController extends Controller
         $code = $request->input("barcode");
         $product = DB::table("stocks")->where("barcode", $code)
         ->leftjoin("products","stocks.product_id","=","products.id")
+        ->where("products.stocks", ">", 0)
         ->select("stocks.barcode","products.id as pid","products.name as pname","products.model")
         ->first();
 

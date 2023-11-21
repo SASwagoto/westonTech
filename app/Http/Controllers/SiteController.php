@@ -8,6 +8,11 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SiteController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth");
+        $this->middleware('role:Super-Admin');
+    }
     /**
      * Display a listing of the resource.
      */

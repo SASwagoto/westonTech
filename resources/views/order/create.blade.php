@@ -13,28 +13,66 @@
     <div class="row">
         <div class="col-lg-12 col-md-12">
             <div class="card">
-                <form action="{{route('cart.updatePrice')}}" method="POST">
+                <form action="{{route('order.store')}}" method="POST">
                 @csrf
                 <div class="card-header">
                     <h4 class="mb-0">Select Products</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-6 col-md-5">
+                        <div class="col-lg-4 col-md-5">
                             <div class="mb-3">
                                 <label for="customer" class="form-label text-primary">Select Customer</label>
-                                <select id="single-select">
-                                    <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
+                                <select id="single-select" class="form-control">
+                                    <option disabled selected value="">Select Customer</option>
+                                    @forelse ($customers as $cust)
+                                        <option value="{{$cust->id}}">{{$cust->phone}}</option>
+                                    @empty
+                                        <option value="">No Data Found</option>
+                                    @endforelse
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Add New Customer</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-12">
+                            <div class="customer_details">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label text-primary">Customer Name</label>
+                                            <input type="text" disabled class="form-control">
+                                            <input type="hidden" name="customer_id">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label text-primary">Customer Phone</label>
+                                            <input type="text" disabled class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label text-primary">Customer Email</label>
+                                            <input type="text" disabled class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="" class="form-label text-primary">Customer Address</label>
+                                            <input type="text" disabled class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-2">
                         <div class="col-3">
                             <div class="mt-4">
                                 <label for="" class="text-primary">Scan Code</label>
-                                <input type="text" name="barcode" id="barcode" class="form-control">
+                                <input type="text" id="barcode" class="form-control">
                             </div>
                         </div>
                         <div class="col-9">
@@ -59,7 +97,7 @@
                                             <th><input readonly type="text" name="barcode[]" class="form-control"
                                                     value="{{ $item->barcode ?? ''}}"></th>
                                             <th>
-                                                <input type="number" name="sale_price[]" oninput="updateTotal()" class="form-control">
+                                                <input type="number" name="sale_price[]" class="form-control">
                                             </th>
                                             <th>
                                                 <a href="{{ route('cart.remove', $item->barcode ?? '') }}"
@@ -72,13 +110,6 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3"></td>
-                                        <th>Total:</th>
-                                        <th id="totalAmount">0.00</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -93,6 +124,57 @@
             </div>
         </div>
     @endsection
+
+    @section('modal')
+<div class="modal fade" id="exampleModalCenter">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form id="customerForm" action="{{route('customer.store')}}" method="POST">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label text-primary">Name</label>
+                                <input type="text" name="name" id="name" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="Phone" class="form-label text-primary">Phone</label>
+                                <input class="form-control" type="tel" id="phone" name="phone" placeholder="e.g., 017XXXXXXXX" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label text-primary">Email</label>
+                                <input class="form-control" type="email" name="email" id="email" value="{{old('email')}}" placeholder="Enter Customer Email">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="address" class="form-label text-primary">Address</label>
+                                <input type="text" name="address" id="address" class="form-control" placeholder="Customer Address">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
 
     @push('js')
     <script src="{{asset('assets')}}/vendor/select2/js/select2.full.min.js"></script>
@@ -128,15 +210,55 @@
             });
         </script>
         <script>
-            function updateTotal() {
-                var total = 0;
-                var salePriceInputs = document.getElementsByName("sale_price[]");
-        
-                salePriceInputs.forEach(function(input) {
-                    total += parseFloat(input.value) || 0;
+            $(document).ready(function(){
+                $('#single-select').on('change', function(){
+                    var id = $(this).val();
+                    var url = '{{route('getCustomer')}}';
+                    $.ajax({
+                            url: url,
+                            method: 'GET',
+                            data: {
+                                id: id
+                            },
+                            success: function(response) {
+                                //console.log(response);
+                                $('.customer_details').html(response);
+                            },
+                            error: function(error) {
+                                
+                            }
+                        });
                 });
-        
-                document.getElementById("totalAmount").innerText = total.toFixed(2);
-            }
+            });
         </script>
+        {{-- <script>
+            $(document).ready(function() {
+                // Submit form using Ajax
+                $('#customerForm').submit(function(e) {
+                    e.preventDefault(); // Prevent the default form submission
+                    var formData = {
+                        name: $('#name').val(),
+                        phone: $('#phone').val(),
+                        email: $('#email').val(),
+                        address: $('#address').val(),
+                        // Add other form fields as needed
+                    };
+                    var url = '{{route('customer.store')}}';
+                    //console.log(formData);
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: formData,
+                        success: function(response) {
+                            $('.customer_details').html(response);
+                            // Assuming your controller returns a JSON response with a success key
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle Ajax errors
+                            console.error('Ajax request failed:', status, error);
+                        }
+                    });
+                });
+            });
+        </script>         --}}
     @endpush

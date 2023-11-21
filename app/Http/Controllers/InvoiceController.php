@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Sale;
 use Illuminate\Http\Request;
+use DB;
 
 class InvoiceController extends Controller
 {
@@ -34,9 +36,29 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Invoice $invoice)
+    public function show(Sale $sale)
     {
-        //
+        $saleInfo = DB::table('sales')
+        ->where('sales.id', $sale->id)
+        ->leftjoin('customers', 'sales.customer_id', '=', 'customers.id')
+        ->leftJoin('users', 'sales.seller_id', '=', 'users.id')
+        ->leftJoin('accounts', 'sales.aid', '=', 'accounts.id')
+        ->select(
+            'sales.*',
+            'customers.name',
+            'customers.phone',
+            'customers.email',
+            'customers.address',
+            'users.name as sname',
+            'accounts.acc_name')
+        ->first();
+        $orders = DB::table('orders')
+        ->where('sale_id', $sale->id)
+        ->leftJoin('products', 'orders.product_id', '=', 'products.id')
+        ->select('orders.*', 'products.name', 'products.model')
+        ->get();
+
+        return view('invoice.invoice', compact('saleInfo', 'orders'));
     }
 
     /**

@@ -104,7 +104,7 @@
                                 <th>#</th>
                                 <th>Barcode</th>
                                 <th>Color</th>
-                                <th>Entry Date</th>
+                                <th>Sold Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -115,7 +115,11 @@
                                     <td>{!! DNS1D::getBarcodeSVG($stock->barcode, 'C39+', 1, 50) !!}
                                     </td>
                                     <td>{{$stock->color}}</td>
-                                    <td>{{$stock->created_at}}</td>
+                                    @if ($stock->isSold == 1)
+                                        <td><span class="badge badge-danger light">Sold Out</span></td>
+                                    @else
+                                    <td><span class="badge badge-success light">Available</span></td>
+                                    @endif
                                     <td>
                                         <ul class="action_btn">
                                             <li>
