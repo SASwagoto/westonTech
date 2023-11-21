@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use RealRashid\SweetAlert\Toaster;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -81,23 +82,51 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+        
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Employee $employee)
+    public function edit($employee)
     {
-        //
+        $employee = User::find($employee);
+        $roles = Role::all();
+        return view('emp.edit', compact('employee', 'roles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $employee)
     {
-        //
+        $emp = User::find($employee);
+        $previousRole = $emp->roles[0]->name;
+        
+        $emp->name = $request->name;
+        $emp->phone = $request->phone;
+        $emp->email = $request->email;
+
+        if ($request->hasFile('image')) {
+
+            if($emp->image){
+                Storage::delete('storage/uploads/' . $employee->image);
+            }
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('storage/uploads'), $imageName);
+
+            $emp->image = $imageName;
+            $emp->save();
+        }
+        if($request->role != $previousRole)
+        {
+            $emp->removeRole($previousRole);
+            $emp->assignRole($request->role);
+        }
+
+        Alert::success('Success', 'Employee Data Updated');
+        return redirect()->back();
     }
 
     /**

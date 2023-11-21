@@ -40,7 +40,7 @@
                                     <td>
                                         <ul class="action_btn">
                                             <li>
-                                                <a href="javascript:void(0);" class="edit-button">
+                                                <a href="{{route('emp.edit', $emp->id)}}" class="edit-button">
                                                     <i class="fa-solid fa-pen-to-square fa-xl" style="color: #347af4;"></i>
                                                 </a>
                                             </li>

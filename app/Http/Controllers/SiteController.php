@@ -11,6 +11,7 @@ class SiteController extends Controller
     public function __construct()
     {
         $this->middleware("auth");
+        $this->middleware('role:Super-Admin');
     }
     /**
      * Display a listing of the resource.
@@ -66,6 +67,7 @@ class SiteController extends Controller
             'company_name' => $request->input('company_name'),
             'company_email' => $request->input('company_email'),
             'company_phone' => $request->input('company_phone'),
+            'address' => $request->input('address'),
             'footer_title' => $request->input('footer_title'),
             'about_us' => $request->input('about_us'),
             'footer_url' => $request->input('footer_url'),

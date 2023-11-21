@@ -15,6 +15,7 @@ class Site extends Model
         'company_name',
         'company_email',
         'company_phone',
+        'address',
         'about_us',
         'fb_url',
         'twitter_url',

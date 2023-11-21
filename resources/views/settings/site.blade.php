@@ -98,6 +98,12 @@
                                 <input type="text" name="footer_url" id="" class="form-control url-input" value="{{$data->footer_url}}">
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="address" class="form-label text-primary">Company Address</label>
+                                <input type="text" name="address" id="address" class="form-control">
+                            </div>
+                        </div>
                     </div>
             
                 </div>

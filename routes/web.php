@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
         Route::get('list', [EmployeeController::class, 'index'])->name('emp.list');
         Route::get('add', [EmployeeController::class, 'create'])->name('emp.add');
         Route::post('store', [EmployeeController::class, 'store'])->name('emp.store');
+        Route::get('show/{employee}', [EmployeeController::class, 'show'])->name('emp.show');
+        Route::get('edit/{employee}', [EmployeeController::class, 'edit'])->name('emp.edit');
+        Route::patch('update/{employee}', [EmployeeController::class, 'update'])->name('emp.update');
+        Route::delete('delete/{employee}', [EmployeeController::class, 'destroy'])->name('emp.delete');
 
     });
 

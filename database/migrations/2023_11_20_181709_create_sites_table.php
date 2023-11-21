@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('company_name')->nullable();
             $table->string('company_email')->nullable();
             $table->string('company_phone')->nullable();
+            $table->string('address')->nullable();
             $table->text('about_us')->nullable();
             $table->string('fb_url')->nullable();
             $table->string('twitter_url')->nullable();
