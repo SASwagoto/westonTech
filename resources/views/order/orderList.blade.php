@@ -54,7 +54,7 @@
                                                     <a class="dropdown-item" onclick="duepay('{{$order->invoice_id}}','{{$order->id}}','{{$order->total}}','{{$order->due}}','{{$order->payment}}')" id="due" data-bs-toggle="modal" data-bs-target="#exampleModal">Due Pay</a>
                                                     
                                                     @endif
-                                                    <a class="dropdown-item" href="{{route('sale.invoice', $order->id)}}">
+                                                    <a class="dropdown-item" href="{{route('sale.invoice', $order->id)}}" target="_blank">
                                                         Print Invoice
                                                     </a>
                                                     {{-- <a class="dropdown-item" onclick="openInvoiceInNewWindow('{{$order->sid}}')" data-id="{{$order->sid}}" >Print Invoice</a> --}}
