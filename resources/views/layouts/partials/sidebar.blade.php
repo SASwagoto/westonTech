@@ -57,6 +57,19 @@
                      <li><a href="{{route('acc.expenses')}}">{{ __('menu.expense') }}</a></li>
                  </ul>
              </li>
+             <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
+                <i class="material-symbols-outlined">
+                    query_stats
+                </i>
+                <span class="nav-text">{{ __('menu.report') }}</span>
+            </a>
+            <ul aria-expanded="false">
+                <li><a href="{{route('acc.index')}}">{{ __('menu.accounts') }}</a></li>
+                <li><a href="{{route('acc.create')}}">{{ __('menu.add.account') }}</a></li>
+                <li><a href="{{route('acc.incomes')}}">{{ __('menu.income') }}</a></li>
+                <li><a href="{{route('acc.expenses')}}">{{ __('menu.expense') }}</a></li>
+            </ul>
+        </li>
              @endrole
          </ul>
      </div>

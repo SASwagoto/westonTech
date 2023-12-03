@@ -26,6 +26,8 @@ return [
     "expense"=> "Expense",
     "add.expense"=> "Add Expense",
     "statements"=> "Statements",
+
+    "report"=> "Report",
     
 
 
