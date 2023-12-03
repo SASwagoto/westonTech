@@ -7,19 +7,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
+use DB;
 
 class SupplierController extends Controller
 {
     public function __construct()
     {
         $this->middleware("auth");
+        $this->middleware('role:Super-Admin');
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $suppliers = Supplier::all();
+        $suppliers = DB::table('suppliers')
+        ->whereNull('suppliers.deleted_at')
+    ->leftJoin('products', 'suppliers.id', '=', 'products.supplier_id')
+    ->select(
+        'suppliers.*',
+        DB::raw('SUM(products.purchase_price * products.stocks) as purchase')
+    )
+    ->groupBy('suppliers.id')
+    ->get();
         return view('supplier.index', compact('suppliers'));
     }
 
@@ -95,8 +105,12 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(Request $request)
     {
-        //
+        $sup =  Supplier::find($request->id);
+        $sup->delete();
+
+        Alert::success('Deleted', 'Supplier Deleted Successfully!');
+        return redirect()->back();
     }
 }

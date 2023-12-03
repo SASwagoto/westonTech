@@ -61,13 +61,6 @@
                                 <input type="text" name="model" placeholder="Enter Product Model" value="{{old('model')}}" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label for="purchase_price" class="form-label text-primary">Purchase Price <span class="required">*</span>
-                                    @error('purchase_price')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror</label>
-                                <input type="number" required style="text-align: right;" placeholder="0.00" class="form-control" name="purchase_price" step="0.01" min="0" pattern="^\d+(\.\d{2})?$">
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label text-primary">Select Supplier</label>
                                 <select id="select-supplier" class="form-control" name="supplier_id">
                                     <option disabled selected value="">Select Suppliers</option>
@@ -77,6 +70,13 @@
                                     <option>No Supplier Found</option>
                                     @endforelse
                                 </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="purchase_price" class="form-label text-primary">Purchase Price <span class="required">*</span>
+                                    @error('purchase_price')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror</label>
+                                <input type="number" required style="text-align: right;" placeholder="0.00" class="form-control" name="purchase_price" step="0.01" min="0" pattern="^\d+(\.\d{2})?$">
                             </div>
                             <div class="mb-3">
                                 <div class="image-preview mt-3">

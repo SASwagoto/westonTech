@@ -22,13 +22,13 @@
                             <div class="col-4">
                                 <div class="mb-3">
                                     <label class="form-label text-primary">Accounts Name</label>
-                                    <input type="text" name="acc_name" class="form-control">
+                                    <input type="text" name="acc_name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="mb-3">
                                     <label class="form-label text-primary">Accounts Type</label>
-                                    <select name="acc_type" id="accType" class="form-control">
+                                    <select name="acc_type" id="accType" class="form-control" required>
                                         <option disabled selected value="">Select Type</option>
                                         <option disabled value="Cash">Cash</option>
                                         <option value="Bank">Bank</option>
@@ -45,13 +45,13 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label text-primary">Bank Name</label>
-                                    <input type="text" disabled id="bank" name="bank_name" class="form-control">
+                                    <input type="text" disabled id="bank" name="bank_name" class="form-control" required> 
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label text-primary">Accounts No</label>
-                                    <input type="text" disabled id="accNo" name="acc_no" class="form-control">
+                                    <input type="text" disabled id="accNo" name="acc_no" class="form-control" required>
                                 </div>
                             </div>
                         </div>

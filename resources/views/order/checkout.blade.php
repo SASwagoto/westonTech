@@ -94,7 +94,7 @@ Order Checkout
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label for="acc" class="form-lable text-primary">Select Account</label>
-                                    <select name="aid" class="form-control">
+                                    <select name="aid" class="form-control" required>
                                         <option disabled selected value="">Select Account</option>
                                         @forelse ($accs as $acc)
                                             <option value="{{$acc->id}}">{{$acc->acc_name}}</option>
@@ -105,7 +105,7 @@ Order Checkout
                                 </div>
                                 <div class="mb-3">
                                     <label for="seller" class="form-lable text-primary">Select Seller</label>
-                                    <select name="seller_id" class="form-control">
+                                    <select name="seller_id" class="form-control" required>
                                         <option disabled selected value="">Select Seller</option>
                                         @forelse ($emps as $emp)
                                             <option value="{{$emp->id}}">{{$emp->name}}</option>

@@ -23,7 +23,7 @@
                         <div class="col-lg-4 col-md-5">
                             <div class="mb-3">
                                 <label for="customer" class="form-label text-primary">Select Customer</label>
-                                <select id="single-select" class="form-control">
+                                <select id="single-select" class="form-control" required>
                                     <option disabled selected value="">Select Customer</option>
                                     @forelse ($customers as $cust)
                                         <option value="{{$cust->id}}">{{$cust->phone}}</option>
@@ -74,6 +74,11 @@
                                 <label for="" class="text-primary">Scan Code</label>
                                 <input type="text" id="barcode" class="form-control">
                             </div>
+                            <div class="mt-4">
+                                <label for="" class="text-primary">Manual Select By Serial Number</label>
+                                <input type="text" id="sn" class="form-control">
+                                <button id="sn_btn" type="button" class="btn btn-primary float-end mt-2">Add</button>
+                            </div>
                         </div>
                         <div class="col-9">
                             <table class="table">
@@ -97,7 +102,7 @@
                                             <th><input readonly type="text" name="barcode[]" class="form-control"
                                                     value="{{ $item->barcode ?? ''}}"></th>
                                             <th>
-                                                <input type="number" name="sale_price[]" class="form-control">
+                                                <input type="number" name="sale_price[]" class="form-control" required>
                                             </th>
                                             <th>
                                                 <a href="{{ route('cart.remove', $item->barcode ?? '') }}"
@@ -207,6 +212,31 @@
                         });
                     }, 500);
                 });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+               $('#sn_btn').on('click', function(){
+                var barCode = $('#sn').val();
+                var url = '{{ route('cart.add') }}';
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    data: {
+                        barcode: barCode
+                    },
+                    success: function(response) {
+                        $('#cart-table').html(response);
+                        $('#barcode').val('');
+                        //console.log('Search Result:', response);
+                        //location.reload();
+                        // Handle the database search result here
+                    },
+                    error: function(error) {
+                        
+                    }
+                });
+               });
             });
         </script>
         <script>

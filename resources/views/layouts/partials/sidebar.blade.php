@@ -6,6 +6,7 @@
                      <span class="nav-text">{{ __('menu.dashboard') }}</span>
                  </a>
              </li>
+             @role('Super-Admin')
              <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
                      <i class="material-symbols-outlined">groups </i>
                      <span class="nav-text">{{ __('menu.employees') }}</span>
@@ -15,6 +16,7 @@
                      <li><a href="{{ route('emp.add') }}">{{ __('menu.add.employee') }}</a></li>
                  </ul>
              </li>
+             
              <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
                      <i class="material-symbols-outlined">store </i>
                      <span class="nav-text">{{ __('menu.supplier') }}</span>
@@ -24,6 +26,7 @@
                      <li><a href="{{ route('sup.add') }}">{{ __('menu.add.supplier') }}</a></li>
                  </ul>
              </li>
+             @endrole
              <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
                      <i class="material-symbols-outlined">store </i>
                      <span class="nav-text">{{ __('menu.product') }}</span>
@@ -42,6 +45,7 @@
                      <li><a href="{{ route('order.add') }}">{{ __('menu.add.order') }}</a></li>
                  </ul>
              </li>
+             @role('Super-Admin')
              <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">
                      <i class="material-symbols-outlined">account_balance </i>
                      <span class="nav-text">{{ __('menu.accounts') }}</span>
@@ -53,6 +57,7 @@
                      <li><a href="{{route('acc.expenses')}}">{{ __('menu.expense') }}</a></li>
                  </ul>
              </li>
+             @endrole
          </ul>
      </div>
  </div>

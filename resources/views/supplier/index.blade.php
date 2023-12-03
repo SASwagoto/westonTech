@@ -74,8 +74,8 @@
                                             <a href="tel:{{$sup->phone}}"><i class="fa-solid fa-phone"></i></a>
                                             <a href="mailto:{{$sup->email}}"><i class="fa-solid fa-envelope"></i></a>
                                         </td>
-                                        <td>
-                                            2,90,000.00
+                                        <td class="text-end">
+                                            {{number_format($sup->purchase, 2)}}
                                         </td>
                                         <td>
                                             <span class="badge {{ $sup->isActive ? 'badge-success' : 'badge-danger' }} light">{{ $sup->isActive ? 'Active' : 'Inactive' }}</span>
@@ -88,14 +88,21 @@
                                                     </a>
                                                 </li>
                                                 <li><a href="javascript:void(0);"
-                                                        onclick="document.getElementById('').submit()"><i
+                                                        onclick="document.getElementById('delete{{$key}}').submit()"><i
                                                             class="fa-solid fa-trash fa-xl" style="color: #ff0000;"></i></a>
                                                 </li>
+                                                <form action="{{route('sup.delete')}}" method="POST" id="delete{{$key}}">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="hidden" name="id" value="{{$sup->id}}">
+                                                </form>
                                             </ul>
                                         </td>
                                     </tr>
                                 @empty
-                                    
+                                    <tr>
+                                        <td colspan="7" class="text-center">No Data Found</td>
+                                    </tr>
                                 @endforelse
 
                             </tbody>

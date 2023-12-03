@@ -116,10 +116,12 @@
                                             <i class="fa-solid fa-user"></i>
                                             <span class="ms-2">Profile </span>
                                         </a>
+                                        @role('Super-Admin')
                                         <a href="{{route('settings.index')}}" class="dropdown-item ai-icon">
                                             <i class="fa-solid fa-gear"></i>
                                             <span class="ms-2">Settings </span>
                                         </a>
+                                        @endrole
 
                                     </div>
                                     <div class="card-footer p-3 text-center">

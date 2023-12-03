@@ -20,7 +20,13 @@ class SaleController extends Controller
      */
     public function index()
     {
-        //
+        $accounts = DB::table('accounts')->get();
+        $orders = DB::table('sales')
+        ->leftJoin('customers', 'sales.customer_id', '=', 'customers.id')
+        ->select('sales.*', 'customers.name', 'customers.phone')
+        ->orderBy('date', 'desc')
+        ->get();
+        return view('order.orderList', compact('orders', 'accounts'));
     }
 
     /**
@@ -112,7 +118,8 @@ class SaleController extends Controller
             'updated_at'=> now()
         ]);
 
-        return redirect()->route('sale.invoice', $saleInfo->id);
+        $url = route('sale.invoice', $saleInfo->id);
+        return redirect()->route('order.list')->with('url', $url);
     }
 
     /**
@@ -121,5 +128,45 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         //
+    }
+
+    public function duePay(Request $request)
+    {
+        $sid = $request->id;
+        DB::table('accounts')->where('id', $request->aid)->increment('balance', $request->payment);
+
+        $income = DB::table('incomes')->insertGetId([
+            'aid'=> $request->aid,
+            'source'=> 'Sales',
+            'amount'=> $request->payment,
+            'date'=> date('Y-m-d'),
+            'description'=> 'Due Bill Pay',
+            'created_by'=> Auth::user()->id,
+            'created_at'=> now(),
+            'updated_at'=> now()
+        ]);
+
+        $trans_id = Str::random(6);
+        DB::table('statements')->insert([
+            'aid'=> $request->aid,
+            'trans_id'=> $trans_id,
+            'income_id'=> $income,
+            'date'=> now(),
+            'notes' => 'Sales',
+            'amount' => $request->payment,
+            'current_balance' => DB::table('accounts')->where('id', $request->aid)->first()->balance,
+            'created_by' => Auth::user()->id,
+            'created_at'=> now(),
+            'updated_at'=> now()
+        ]);
+
+        DB::table('sales')->where('id', $sid)->update([
+            'payment' => DB::raw("payment + $request->payment "),
+                'due' => DB::raw("due - $request->payment "),
+                'updated_at'=> now(),
+        ]);
+
+        $url = route('sale.invoice', $sid);
+        return redirect()->route('order.list')->with('url', $url);
     }
 }

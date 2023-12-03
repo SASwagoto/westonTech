@@ -197,7 +197,7 @@
             <div class="row">
                 <div class="col-md-9">
                     <div class="notes mt-3">
-                        <p class="custom_font mb-1">Taka in Word: Three Thousand Seven Hundred Ninety Six Taka Only.</p>
+                        <p class="custom_font mb-1">Taka in Word: {{ ucfirst(trim((new NumberFormatter('en', NumberFormatter::SPELLOUT))->format($saleInfo->payment))) }} only.</p>
                         <p class="custom_font">Replacement warranty applicable for one time in whole warranty period.</p>
                     </div>
                     <div class="row">

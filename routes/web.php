@@ -33,7 +33,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    //Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
 
@@ -54,12 +54,14 @@ Route::middleware('auth')->group(function () {
         Route::get('list', [SupplierController::class, 'index'])->name('sup.list');
         Route::get('add', [SupplierController::class, 'create'])->name('sup.add');
         Route::post('store', [SupplierController::class, 'store'])->name('sup.store');
+        Route::delete('delete', [SupplierController::class, 'destroy'])->name('sup.delete');
     });
 
     Route::prefix('customer')->group(function (){
         Route::get('/list', [CustomerController::class, 'index'])->name('customer.list');
         Route::get('/add', [CustomerController::class, 'create'])->name('customer.create');
         Route::post('/store', [CustomerController::class, 'store'])->name('customer.store');
+        Route::delete('/delete', [CustomerController::class, 'destroy'])->name('customer.delete');
         Route::get('/get-customer', [CustomerController::class, 'getCustomer'])->name('getCustomer');
 
     });
@@ -77,11 +79,12 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('order')->group(function () {
-        Route::get('/list', [OrderController::class,'index'])->name('order.list');
+        Route::get('/list', [SaleController::class,'index'])->name('order.list');
         Route::get('/add', [OrderController::class,'create'])->name('order.add');
         Route::post('/store', [OrderController::class,'store'])->name('order.store');
         Route::get('/checkout/{sale}', [SaleController::class, 'show'])->name('order.checkout');
         Route::post('/sale', [SaleController::class, 'update'])->name('order.sold');
+        Route::post('/duepay', [SaleController::class, 'duePay'])->name('order.duepay');
         Route::get('/invoice/{sale}', [InvoiceController::class, 'show'])->name('sale.invoice');
     });
 
@@ -106,7 +109,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('settings')->group(function (){
         Route::get('/site', [SiteController::class,'index'])->name('settings.index');
-    Route::post('/site/{site}', [SiteController::class,'update'])->name('settings.update');
+        Route::post('/site/{site}', [SiteController::class,'update'])->name('settings.update');
     });
 });
 

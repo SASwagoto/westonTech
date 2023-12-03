@@ -41,14 +41,14 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request->supplier_id;
         $validator =  Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'specification' => 'nullable|string',
             'product_img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
             'model' => 'nullable|string|max:255',
             'purchase_price' => 'required|numeric|min:0',
-            'supplier_id' => 'nullable|exists:suppliers,id',
-
+            'supplier_id' => 'nullable'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -57,10 +57,10 @@ class ProductController extends Controller
         $product = Product::create([
             'name'=> $request->name,
             'slug'=> $slug,
+            'supplier_id'=> $request->supplier_id,
             'model'=> $request->model,
             'specification'=> $request->specification,
             'purchase_price'=> $request->purchase_price,
-            'supplier_id'=> $request->supplier_id,
         ]);
         if ($request->hasFile('product_img')) {
             $image = $request->file('product_img');
