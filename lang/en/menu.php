@@ -28,6 +28,7 @@ return [
     "statements"=> "Statements",
 
     "report"=> "Report",
+    "sale.report"=>"Sales Report",
     
 
 

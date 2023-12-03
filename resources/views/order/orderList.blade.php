@@ -143,12 +143,12 @@
 @endsection
 
 @push('js')
-@if (Session::has('url'))
+{{-- @if (Session::has('url'))
 <script type="text/javascript">
     // JavaScript to open a new tab with the URL specified in the header
     window.open("{{ Session::get('url') }}", '_blank');
 </script>
-@endif
+@endif --}}
 
 <script>
     function duepay(name, id, fee, due, payment) {
