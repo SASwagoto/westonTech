@@ -45,14 +45,21 @@
                                                 </a>
                                             </li>
                                             <li><a href="javascript:void(0);"
-                                                    onclick="document.getElementById('').submit()"><i
+                                                    onclick="document.getElementById('deleteForm{{$emp->id}}').submit()"><i
                                                         class="fa-solid fa-trash fa-xl" style="color: #ff0000;"></i></a>
                                             </li>
+                                            <form id="deleteForm{{$emp->id}}" action="{{route('emp.delete', $emp->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="id" value="{{$emp->id}}">
+                                            </form>
                                         </ul>
                                     </td>
                                 </tr>  
                                 @empty
-                                    
+                                    <tr>
+                                        <td class="text-center" colspan="5">NO Data Found</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
