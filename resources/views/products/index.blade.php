@@ -46,10 +46,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Product Name</th>
+                                    <th>Barcode</th>
                                     <th>Model</th>
                                     <th>Specification</th>
                                     <th>Stocks</th>
-                                    <th>Stocks Details</th>
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
@@ -69,19 +69,14 @@
                                                 <h6>{{ $product->name }}</h6>
                                             </div>
                                         </td>
+                                        <td>{{$product->barcode}}</td>
                                         <td>{{$product->model}}</td>
-                                        <td>{{$product->specification}}</td>
+                                        <td title="{{$product->specification}}">{!! \Illuminate\Support\Str::words($product->specification, 4,'....')  !!}</td>
                                         <td>{{$product->stocks}}</td>
-                                        <td>
-                                            <a href="{{route('stock.list', $product->slug)}}">Details</a>
-                                        </td>
                                         <td>
                                             <ul class="action_btn">
                                                 <li>
-                                                    <a href="{{route('stock.add', $product->slug)}}"><i class="fa-solid fa-square-plus fa-xl" style="color: #1f512b;"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);" class="edit-button">
+                                                    <a href="{{route('product.edit', $product->slug)}}" class="edit-button">
                                                         <i class="fa-solid fa-pen-to-square fa-xl" style="color: #347af4;"></i>
                                                     </a>
                                                 </li>

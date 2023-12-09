@@ -41,23 +41,26 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request->supplier_id;
         $validator =  Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'barcode' => 'required|string|unique:products',
             'specification' => 'nullable|string',
             'product_img' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
             'model' => 'nullable|string|max:255',
             'purchase_price' => 'required|numeric|min:0',
-            'supplier_id' => 'nullable'
+            'supplier_id' => 'nullable',
+            'stocks' => 'required|numeric|min:1'
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $slug = Str::slug($request->name.'-'.now());
         $product = Product::create([
+            'barcode' => $request->barcode,
             'name'=> $request->name,
             'slug'=> $slug,
             'supplier_id'=> $request->supplier_id,
+            'stocks'=> $request->stocks,
             'model'=> $request->model,
             'specification'=> $request->specification,
             'purchase_price'=> $request->purchase_price,
@@ -77,7 +80,7 @@ class ProductController extends Controller
         }
 
         Alert::success($product->name, 'Added Successfully');
-        return redirect()->route('stock.add', $product->slug);
+        return redirect()->route('product.list');
     }
 
     /**
@@ -85,7 +88,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        
     }
 
     /**
@@ -93,7 +96,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $suppliers = Supplier::active()->get();
+        $item = $product;
+        return view('products.edit', compact('item', 'suppliers'));
     }
 
     /**
@@ -101,7 +106,32 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        // Update the product with the new data
+        $product->update([
+            'name' => $request->name,
+            'barcode' => $request->barcode,
+            'specification' => $request->specification,
+            'model' => $request->model,
+            'purchase_price' => $request->purchase_price,
+            'supplier_id' => $request->supplier_id,
+            'stocks' => $request->stocks,
+            'isGiftable' => $request->has('giftable') ? 1 : 0,
+        ]);
+
+        // Handle image upload if a new image is provided
+        if ($request->hasFile('product_img')) {
+            // Delete the old image file if it exists
+            if ($product->product_img) {
+                Storage::delete('storage/products/' . $product->product_img);
+            }
+
+            // Store the new image file
+            $imagePath = $request->file('product_img')->store('storage/products');
+            $product->update(['product_img' => basename($imagePath)]);
+        }
+
+        Alert::success('Updated', 'Product Details Updated');
+        return redirect()->route('product.list');
     }
 
     /**
@@ -114,50 +144,50 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function stock_add(Product $product)
-    {
-        return view('products.stock', compact('product'));
-    }
+    // public function stock_add(Product $product)
+    // {
+    //     return view('products.stock', compact('product'));
+    // }
 
-    public function stock_list(Product $product)
-    {
-        $product = Product::find( $product->id );
-        $stocks = Stock::where('product_id', $product->id )->get();
-        return view('products.stocklist', compact('product', 'stocks'));
+    // public function stock_list(Product $product)
+    // {
+    //     $product = Product::find( $product->id );
+    //     $stocks = Stock::where('product_id', $product->id )->get();
+    //     return view('products.stocklist', compact('product', 'stocks'));
         
-    }
+    // }
 
-    public function stock_store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'product_id' => 'required|exists:products,id',
-            'barcode' => 'required|string',
-            'color' => 'nullable|string',
-            'unit' => 'nullable|string',
-            'others' => 'nullable|string',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        $product = Product::find($request->product_id);
-        $stock = Stock::create($request->all());
-        if($stock && $product){
-            $product->stocks += 1;
-            $product->save();
-            //Storage::disk('public')->put($stock->barcode.'.png',base64_decode(DNS2D::getBarcodePNG("4", "PDF417")));
-        }
-        Alert::success($product->name,'Stock Updated');
-        return redirect()->back();
-    }
+    // public function stock_store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'product_id' => 'required|exists:products,id',
+    //         'barcode' => 'required|string',
+    //         'color' => 'nullable|string',
+    //         'unit' => 'nullable|string',
+    //         'others' => 'nullable|string',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    //     $product = Product::find($request->product_id);
+    //     $stock = Stock::create($request->all());
+    //     if($stock && $product){
+    //         $product->stocks += 1;
+    //         $product->save();
+    //         //Storage::disk('public')->put($stock->barcode.'.png',base64_decode(DNS2D::getBarcodePNG("4", "PDF417")));
+    //     }
+    //     Alert::success($product->name,'Stock Updated');
+    //     return redirect()->back();
+    // }
 
-    public function stock_delete(Stock $stock)
-    {
-        $product = Product::where('id', $stock->product_id )->firstOrFail();
-        $product->stocks -= 1;
-        $product->save();
+    // public function stock_delete(Stock $stock)
+    // {
+    //     $product = Product::where('id', $stock->product_id )->firstOrFail();
+    //     $product->stocks -= 1;
+    //     $product->save();
 
-        $stock->delete();
-        Alert::success('Deleted','Item Deleted Successfully!');
-        return redirect()->back();
-    }
+    //     $stock->delete();
+    //     Alert::success('Deleted','Item Deleted Successfully!');
+    //     return redirect()->back();
+    // }
 }

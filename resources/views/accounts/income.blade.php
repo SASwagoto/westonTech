@@ -39,7 +39,13 @@
                                 <td>{{$income->description}}</td>
                                 <td class="text-end fw-bold">{{number_format($income->amount, 2)}}</td>
                                 <td class="d-flex justify-content-end">
-                                    <a href="#"><i class="fa-solid fa-file-invoice-dollar fa-xl"></i></a>
+                                    <a onclick="editIncome('{{$income->id}}','{{$income->source}}','{{$income->aid}}','{{$income->description}}','{{$income->amount}}', '{{$income->date}}')" data-bs-toggle="modal" data-bs-target="#editModal"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
+                                    <a href="javascript:void(0);" onclick="document.getElementById('deleteForm{{$key+1}}').submit();" class="ms-2"><i class="fa-solid fa-trash fa-xl text-danger"></i></a>
+                                    <form action="{{route('acc.incomeDelete')}}" method="POST" id="deleteForm{{$key+1}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id" value="{{$income->id}}">
+                                    </form>
                                 </td>
                             </tr>
                             @empty
@@ -72,6 +78,71 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Income</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="source" class="form-label text-primary">Source</label>
+                                <input type="text" name="source" required class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="amount" class="form-label text-primary">Amount</label>
+                                <input type="number" name="amount" step="0.01" required class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="date" class="form-label text-primary">Date</label>
+                                <input type="date" name="date" required class="form-control" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="aid" class="form-label text-primary">Select Account</label>
+                                <select name="aid" class="form-control" required>
+                                    @forelse ($accounts as $acc)
+                                       <option value="{{$acc->id}}">{{$acc->acc_name}}</option> 
+                                    @empty
+                                        <option value="">No Accounts Found</option>
+                                    @endforelse
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="description" class="form-label text-primary">Description</label>
+                                <input type="text" name="description" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form action="{{route('acc.editIncome')}}" method="POST">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="income_id" id="income_id">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Income</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                     </button>
                 </div>
@@ -130,4 +201,23 @@
 @endsection
 
 @push('js')
+<script>
+    function editIncome(id, source, aid, desc, amount, date) {
+        document.getElementById('income_id').value = id;
+        document.getElementById('source').value = source;
+        document.getElementById('amount').value = amount;
+        document.getElementById('date').value = date;
+        document.getElementById('description').value = desc;
+        var selectElement = document.getElementById('aid');
+        
+        for (var i = 0; i < selectElement.options.length; i++) {
+            var option = selectElement.options[i];
+            
+            if (option.value == aid) {
+                option.selected = true;
+                break;
+            }
+        }
+    }
+</script>
 @endpush

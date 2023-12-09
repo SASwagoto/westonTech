@@ -65,9 +65,6 @@
             </a>
             <ul aria-expanded="false">
                 <li><a href="#">{{ __('menu.sale.report') }}</a></li>
-                <li><a href="{{route('acc.create')}}">{{ __('menu.add.account') }}</a></li>
-                <li><a href="{{route('acc.incomes')}}">{{ __('menu.income') }}</a></li>
-                <li><a href="{{route('acc.expenses')}}">{{ __('menu.expense') }}</a></li>
             </ul>
         </li>
              @endrole

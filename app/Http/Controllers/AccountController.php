@@ -145,6 +145,46 @@ class AccountController extends Controller
         return redirect()->back();
     }
 
+    public function editIncome(Request $request)
+    {
+        $income = DB::table('incomes')->where('id', $request->income_id)->first();
+        $prevAmount = $income->amount;
+
+        DB::table('incomes')->where('id', $request->income_id)->update([
+            'aid'=> $request->aid,
+            'source'=> $request->source,
+            'amount'=> $request->amount,
+            'date'=> date('Y-m-d', strtotime($request->date)),
+            'description'=> $request->description,
+            'created_by'=> Auth::user()->id,
+            'updated_at'=> now()
+        ]);
+        DB::table('accounts')->where('id', $income->aid)->decrement('balance', $prevAmount);
+        DB::table('accounts')->where('id', $request->aid)->increment('balance', $request->amount);
+        DB::table('statements')->where('income_id', $income->id)->update([
+            'aid'=> $request->aid,
+            'date'=> now(),
+            'notes' => 'Income',
+            'amount' => $request->amount,
+            'current_balance' => DB::table('accounts')->where('id', $request->aid)->first()->balance,
+            'created_by' => Auth::user()->id,
+            'updated_at'=> now()
+        ]);
+        Alert::success('Income','Updated Successfully');
+        return redirect()->back();
+    }
+
+    public function deleteIncome(Request $request)
+    {
+        $income = DB::table('incomes')->where('id', $request->id)->first();
+        DB::table('accounts')->where('id', $income->aid)->decrement('balance', $income->amount);
+        DB::table('statements')->where('income_id', $income->id)->delete();
+
+        DB::table('incomes')->where('id', $request->id)->delete();
+
+        Alert::success('Deleted','Deleted Successfully');
+        return redirect()->back();
+    }
     public function expenses()
     {
         $accounts = Account::all();

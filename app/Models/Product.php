@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'slug', 'model', 'specification', 'purchase_price', 'supplier', 'stocks', 'product_img'
+        'barcode', 'name', 'slug', 'model', 'specification', 'purchase_price', 'supplier', 'stocks', 'product_img'
     ] ;
 
     public function getRouteKeyName()

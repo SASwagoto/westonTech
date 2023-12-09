@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Add Product
+    Edit Product
 @endsection
 @push('css')
 <link rel="stylesheet" href="{{ asset('assets') }}/vendor/select2/css/select2.min.css">
@@ -15,7 +15,7 @@
 </style>
 @endpush
 @section('header_title')
-    Add New Product
+   Edit -  {{$item->name}}
 @endsection
 
 @section('content')
@@ -26,8 +26,9 @@
                 <a href="{{route('product.list')}}" class="btn btn-primary">Product List</a>
             </div>
             <div class="card-body">
-                <form action="{{route('product.store')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('product.update', $item->slug)}}" method="post" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
                             <div class="mb-3">
@@ -38,7 +39,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </label>
-                            <input type="text" class="form-control" name="barcode" placeholder="Scan Barcode"
+                            <input type="text" class="form-control" name="barcode" placeholder="Scan Barcode" value="{{$item->barcode}}"
                                 required>
                             </div>
                         </div>
@@ -49,7 +50,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 </label>
-                                <input type="text" class="form-control" name="name"  placeholder="Enter Product Name"  value="{{old('name')}}">
+                                <input type="text" class="form-control" name="name"  placeholder="Enter Product Name"  value="{{$item->name}}">
                             </div>
                         </div>
                     </div>
@@ -61,7 +62,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 </label>
-                                <input type="text" name="model" placeholder="Enter Product Model" value="{{old('model')}}" class="form-control">
+                                <input type="text" name="model" placeholder="Enter Product Model" value="{{$item->model}}" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
@@ -69,7 +70,7 @@
                                 <label for="stocks" class="form-label text-primary">Product Stocks @error('stocks')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror</label>
-                                <input type="number" name="stocks" placeholder="Enter Stocks" value="{{old('stocks')}}" class="form-control">
+                                <input type="number" name="stocks" placeholder="Enter Stocks" value="{{$item->stocks}}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -78,7 +79,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="mb-3">
                                 <label for="specification" class="form-label text-primary">Product Specification </label>
-                                <textarea name="specification" class="form-control" rows="5" placeholder="Enter Product Specifications"></textarea>
+                                <textarea name="specification" class="form-control" rows="5" placeholder="Enter Product Specifications">{{$item->specification}}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-primary">Upload Product Image @error('product_img')
@@ -88,7 +89,7 @@
                             </div>
                             <div class="mb-3">
                                 <div class="form-check mb-2">
-                                    <input type="checkbox" name="giftable" class="form-check-input" id="check1" value="1" checked="">
+                                    <input type="checkbox" name="giftable" class="form-check-input" id="check1" value="1" {{ $item->isGiftable == 1 ? 'checked' : '' }}>
                                     <label class="form-check-label" for="check1">Giftable</label>
                                 </div>
                             </div>
@@ -99,14 +100,14 @@
                                     @error('purchase_price')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror</label>
-                                <input type="number" required style="text-align: right;" placeholder="0.00" class="form-control" name="purchase_price" step="0.01" min="0" pattern="^\d+(\.\d{2})?$">
+                                <input type="number" required style="text-align: right;" placeholder="0.00" value="{{$item->purchase_price}}" class="form-control" name="purchase_price" step="0.01" min="0" pattern="^\d+(\.\d{2})?$">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label text-primary">Select Supplier</label>
                                 <select id="select-supplier" class="form-control" name="supplier_id">
                                     <option disabled selected value="">Select Suppliers</option>
                                     @forelse ($suppliers as $supplier)
-                                    <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                    <option @if($item->supplier_id == $supplier->id) selected @endif value="{{$supplier->id}}">{{$supplier->name}}</option>
                                     @empty
                                     <option>No Supplier Found</option>
                                     @endforelse
@@ -114,7 +115,7 @@
                             </div>
                             <div class="mb-3">
                                 <div class="image-preview mt-3">
-                                    <img id="preview" src="{{asset('assets')}}/images/preview.png" class="w-100" alt="image-previewer">
+                                    <img id="preview" src="{{asset('storage/products/' . $item->product_img)}}" class="w-100" alt="image-previewer">
                                 </div>
                             </div>
                         </div>
@@ -122,7 +123,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </div>
                         </div>
                     </div>

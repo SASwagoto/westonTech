@@ -70,12 +70,14 @@ Route::middleware('auth')->group(function () {
         Route::get('list', [ProductController::class,'index'])->name('product.list');
         Route::get('add', [ProductController::class, 'create'])->name('product.add');
         Route::post('store', [ProductController::class,'store'])->name('product.store');
+        Route::get('edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('update/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('delete/{product}', [ProductController::class,'destroy'])->name('product.delete');
 
-        Route::get('/stock/add/{product}', [ProductController::class,'stock_add'])->name('stock.add');
-        Route::get('/stock/list/{product}', [ProductController::class,'stock_list'])->name('stock.list');
-        Route::post('/stock/store', [ProductController::class,'stock_store'])->name('stock.store');
-        Route::delete('/stock/delete/{stock}', [ProductController::class,'stock_delete'])->name('stock.delete');
+        // Route::get('/stock/add/{product}', [ProductController::class,'stock_add'])->name('stock.add');
+        // Route::get('/stock/list/{product}', [ProductController::class,'stock_list'])->name('stock.list');
+        // Route::post('/stock/store', [ProductController::class,'stock_store'])->name('stock.store');
+        // Route::delete('/stock/delete/{stock}', [ProductController::class,'stock_delete'])->name('stock.delete');
     });
 
     Route::prefix('order')->group(function () {
@@ -101,8 +103,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/store', [AccountController::class, 'store'])->name('acc.store');
         Route::delete('/delete', [AccountController::class, 'destroy'])->name('acc.delete');
         Route::get('/statements/{id}', [AccountController::class,'statments'])->name('acc.stats');
+
         Route::get('/incomes', [AccountController::class,'incomes'])->name('acc.incomes');
         Route::post('/income/create', [AccountController::class,'addIncome'])->name('acc.addIncome');
+        Route::put('/income/edit', [AccountController::class,'editIncome'])->name('acc.editIncome');
+        Route::delete('/income/delete', [AccountController::class,'deleteIncome'])->name('acc.incomeDelete');
+
         Route::get('/expenses', [AccountController::class,'expenses'])->name('acc.expenses');
         Route::post('/expense/create', [AccountController::class,'addExpense'])->name('acc.addExpense');
     });
