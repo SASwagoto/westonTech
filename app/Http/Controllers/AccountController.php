@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
-use DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AccountController extends Controller
