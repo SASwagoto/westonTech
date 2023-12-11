@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -12,10 +13,9 @@ class CartController extends Controller
     {
         
         $code = $request->input("barcode");
-        $product = DB::table("stocks")->where("barcode", $code)
-        ->leftjoin("products","stocks.product_id","=","products.id")
-        ->where("products.stocks", ">", 0)
-        ->select("stocks.barcode","products.id as pid","products.name as pname","products.model")
+        $product = DB::table("products")->where("barcode", $code)
+        ->where("stocks", ">", 0)
+        ->select("barcode","id","name","model")
         ->first();
 
         if ($product) {

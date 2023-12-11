@@ -36,7 +36,7 @@
                                         <a href="tel:{{$emp->phone}}"><i class="fa-solid fa-phone"></i></a>
                                         <a href="mailto:{{$emp->email}}"><i class="fa-solid fa-envelope"></i></a>
                                     </td>
-                                    <td>1200.00</td>
+                                    <td>--</td>
                                     <td>
                                         <ul class="action_btn">
                                             <li>

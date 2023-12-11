@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sale Invoice : {{config('app.name', 'laravel')}}</title>
 
+    <link rel="shortcut icon" type="image/png" href="{{asset('assets')}}/images/logo.png" >
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -82,7 +84,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="logo">
-                    <img src="{{asset('storage/site/'.$siteInfo->app_logo)}}" width="80" alt="logo">
+                    <img src="{{asset('assets')}}/images/logo.png" width="80" alt="logo">
                 </div>
             </div>
             <div class="col-md-7">

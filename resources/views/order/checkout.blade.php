@@ -54,7 +54,9 @@ Order Checkout
                                 <th>#</th>
                                 <th>Product Name</th>
                                 <th>Serial No</th>
-                                <th>price</th>
+                                <th>Qty</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Total Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,7 +65,9 @@ Order Checkout
                                     <td>{{$key + 1}}</td>
                                     <td>{{$item->name}}</td>
                                     <td>{{$item->barcode}}</td>
+                                    <td>{{$item->qty}}</td>
                                     <td class="text-end">{{number_format($item->sale_price, 2)}}</td>
+                                    <td class="text-end">{{number_format($item->sale_price * $item->qty, 2)}}</td>
                                 </tr>
                             @empty
                                 

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class OrderController extends Controller
@@ -25,13 +26,30 @@ class OrderController extends Controller
     
     public function store(Request $request)
     {
-        //return $request;
-        $totalPrice = array_sum($request->sale_price);
+        $customerId = '';
+        if($request->customer_id == null){
+            $customerId = DB::table('customers')->insertGetId([
+                'name' => $request->input('name'),
+                'phone' => $request->input('phone'),
+                'email' => $request->input('email'),
+                'address' => $request->input('address'),
+                'created_at'=> now(),
+                'updated_at'=> now()
+            ]);
+        }else{
+            $customerId = $request->customer_id;
+        }
+
+
+        $totalPrice = array_sum(array_map(function($price, $quantity) {
+            return $price * $quantity;
+        }, $request->sale_price, $request->qty));
+        //return $customerId .'-'. $totalPrice;
 
         $invoice = Str::random(6);
         $sale = DB::table('sales')->insertGetId([
             'invoice_id'=> $invoice,
-            'customer_id'=> $request->customer_id,
+            'customer_id'=> $customerId,
             'total'=> $totalPrice,
             'date'=> now(),
             'created_at'=> now(),
@@ -43,15 +61,13 @@ class OrderController extends Controller
                 'product_id'=> $pid,
                 'sale_id'=> $sale,
                 'barcode' => $request->input('barcode')[$key],
+                'qty' => $request->input('qty')[$key],
                 'sale_price' => $request->input('sale_price')[$key],
                 'created_at'=> now(),
                 'updated_at'=>now()
             ]);
 
-            DB::table('stocks')->where('barcode', $request->input('barcode')[$key])->update([
-                'isSold'=> true,
-            ]);
-            DB::table('products')->where('id', $pid)->decrement('stocks', 1);
+            DB::table('products')->where('id', $pid)->decrement('stocks', $request->input('qty')[$key]);
         }
 
         session()->forget('cart');

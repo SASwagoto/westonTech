@@ -84,7 +84,7 @@ class AccountController extends Controller
         ->leftJoin('incomes', 'statements.income_id', '=', 'incomes.id')
         ->leftJoin('expenses', 'statements.expense_id', '=', 'expenses.id')
         ->select('statements.*', 'incomes.source', 'incomes.description as idesc', 'expenses.payee', 'expenses.description as edesc')
-        ->get();
+        ->paginate(20);
 
         return view('accounts.statement', compact('stats', 'acc'));
     }
@@ -108,7 +108,7 @@ class AccountController extends Controller
         $incomes = DB::table('incomes')
         ->leftJoin('accounts', 'incomes.aid', '=', 'accounts.id')
         ->select('incomes.*', 'accounts.acc_name')
-        ->get();
+        ->paginate(20);
         return view('accounts.income', compact('accounts', 'incomes'));
     }
 
@@ -147,6 +147,7 @@ class AccountController extends Controller
 
     public function editIncome(Request $request)
     {
+
         $income = DB::table('incomes')->where('id', $request->income_id)->first();
         $prevAmount = $income->amount;
 
@@ -191,7 +192,7 @@ class AccountController extends Controller
         $expenses = DB::table('expenses')
         ->leftJoin('accounts', 'expenses.aid', '=', 'accounts.id')
         ->select('expenses.*', 'accounts.acc_name')
-        ->get();
+        ->paginate(20);
         return view('accounts.expense', compact('accounts', 'expenses'));
     }
 
@@ -216,7 +217,7 @@ class AccountController extends Controller
             'trans_id'=> $trans_id,
             'expense_id'=> $expense,
             'date'=> now(),
-            'notes' => 'Income',
+            'notes' => 'Expense',
             'amount' => $request->amount,
             'current_balance' => DB::table('accounts')->where('id', $request->aid)->first()->balance,
             'created_by' => Auth::user()->id,
@@ -225,6 +226,47 @@ class AccountController extends Controller
         ]);
 
         Alert::success('Expense','Added Successfully');
+        return redirect()->back();
+    }
+
+    public function editExpense(Request $request)
+    {
+        $expense = DB::table('expenses')->where('id', $request->expense_id)->first();
+        $prevAmount = $expense->amount;
+
+        DB::table('expenses')->where('id', $request->expense_id)->update([
+            'aid'=> $request->aid,
+            'payee'=> $request->payee,
+            'amount'=> $request->amount,
+            'date'=> date('Y-m-d', strtotime($request->date)),
+            'description'=> $request->description,
+            'created_by'=> Auth::user()->id,
+            'updated_at'=> now()
+        ]);
+        DB::table('accounts')->where('id', $expense->aid)->increment('balance', $prevAmount);
+        DB::table('accounts')->where('id', $request->aid)->decrement('balance', $request->amount);
+        DB::table('statements')->where('expense_id', $expense->id)->update([
+            'aid'=> $request->aid,
+            'date'=> now(),
+            'notes' => 'Expense',
+            'amount' => $request->amount,
+            'current_balance' => DB::table('accounts')->where('id', $request->aid)->first()->balance,
+            'created_by' => Auth::user()->id,
+            'updated_at'=> now()
+        ]);
+        Alert::success('Expense','Updated Successfully');
+        return redirect()->back();
+    }
+
+    public function deleteExpense(Request $request)
+    {
+        $expense = DB::table('expenses')->where('id', $request->id)->first();
+        DB::table('accounts')->where('id', $expense->aid)->decrement('balance', $expense->amount);
+        DB::table('statements')->where('expense_id', $expense->id)->delete();
+
+        DB::table('expenses')->where('id', $request->id)->delete();
+
+        Alert::success('Deleted','Deleted Successfully');
         return redirect()->back();
     }
 }

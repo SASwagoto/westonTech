@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
-use DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
 {
@@ -91,7 +93,8 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        $sup = $supplier;
+        return view('supplier.edit', compact('sup'));
     }
 
     /**
@@ -99,7 +102,42 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Find the supplier by slug
+        $supplier = Supplier::where('slug', $supplier->slug)->firstOrFail();
+
+        // Update the supplier data
+        $supplier->name = $request->input('name');
+        $supplier->email = $request->input('email');
+        $supplier->phone = $request->input('phone');
+        $supplier->address = $request->input('address');
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete the previous image if it exists
+            if ($supplier->image) {
+                Storage::delete('storage/supplier/' . $supplier->image);
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('storage/supplier'), $imageName);
+
+            $supplier->image = $imageName;
+        }
+
+        // Save the changes to the database
+        $supplier->save();
+
+        Alert::success($supplier->name,'Added Successfully');
+        return redirect()->route('sup.list');
     }
 
     /**

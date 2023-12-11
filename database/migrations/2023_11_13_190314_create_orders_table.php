@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('sale_id');
             $table->string('barcode');
+            $table->unsignedInteger('qty')->default(1);
             $table->double('sale_price');
             $table->timestamps();
         });

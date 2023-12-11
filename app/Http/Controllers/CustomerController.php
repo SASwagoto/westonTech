@@ -89,8 +89,8 @@ class CustomerController extends Controller
     }
 
     public function getCustomer(Request $request){
-        $cus_id = $request->input("id");
-        $customer = DB::table('customers')->where('id', $cus_id)->first();
+        $cus_phone = $request->input("phone");
+        $customer = DB::table('customers')->where('phone', $cus_phone)->first();
         return view('order.getCustomer', compact('customer'));
     }
 }

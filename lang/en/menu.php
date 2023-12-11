@@ -29,6 +29,8 @@ return [
 
     "report"=> "Report",
     "sale.report"=>"Sales Report",
+
+    "trash" => "Trash"
     
 
 

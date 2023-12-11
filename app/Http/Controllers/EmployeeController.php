@@ -140,4 +140,31 @@ class EmployeeController extends Controller
         Alert::success('Success', 'Employee Delete Successfully');
         return redirect()->back();
     }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+
+        if (!$user) {
+            abort(404);
+        }
+
+        $user->restore();
+        Alert::success('Restore', 'Employee restore Successfully');
+        return redirect()->back();
+    }
+
+    public function forceDelete($id)
+    {
+        $user = User::withTrashed()->find($id);
+
+        if (!$user) {
+            abort(404);
+        }
+
+        $user->forceDelete();
+        Alert::success('Delete', 'Employee restore Permanently');
+        return redirect()->back();
+
+    }
 }

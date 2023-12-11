@@ -10,6 +10,7 @@ use App\Http\Controllers\LangController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SupplierController;
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
         Route::get('edit/{employee}', [EmployeeController::class, 'edit'])->name('emp.edit');
         Route::patch('update/{employee}', [EmployeeController::class, 'update'])->name('emp.update');
         Route::delete('delete/{employee}', [EmployeeController::class, 'destroy'])->name('emp.delete');
+        Route::put('/{id}/restore', [EmployeeController::class, 'restore'])->name('emp.restore');
+        Route::delete('/{id}/force-delete', [EmployeeController::class, 'forceDelete'])->name('emp.forceDelete');
 
     });
 
@@ -54,6 +57,8 @@ Route::middleware('auth')->group(function () {
         Route::get('list', [SupplierController::class, 'index'])->name('sup.list');
         Route::get('add', [SupplierController::class, 'create'])->name('sup.add');
         Route::post('store', [SupplierController::class, 'store'])->name('sup.store');
+        Route::get('edit/{supplier}', [SupplierController::class, 'edit'])->name('sup.edit');
+        Route::put('update/{supplier}', [SupplierController::class, 'update'])->name('sup.update');
         Route::delete('delete', [SupplierController::class, 'destroy'])->name('sup.delete');
     });
 
@@ -111,12 +116,21 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/expenses', [AccountController::class,'expenses'])->name('acc.expenses');
         Route::post('/expense/create', [AccountController::class,'addExpense'])->name('acc.addExpense');
+        Route::put('/expense/edit', [AccountController::class,'editExpense'])->name('acc.editExpense');
+        Route::delete('/expense/delete', [AccountController::class,'deleteExpense'])->name('acc.ExpenseDelete');
+    });
+
+    Route::prefix('report')->group(function(){
+        Route::get('/sales-report',[ReportController::class, 'saleReport'])->name('report.sale');
+        Route::get('/sales-report-by-date',[ReportController::class, 'saleReportByDate'])->name('saleReportByDate');
     });
 
     Route::prefix('settings')->group(function (){
         Route::get('/site', [SiteController::class,'index'])->name('settings.index');
         Route::post('/site/{site}', [SiteController::class,'update'])->name('settings.update');
+        route::get('/trash', [ReportController::class, 'trashbox'])->name('settings.trash');
     });
+
 });
 
 require __DIR__.'/auth.php';

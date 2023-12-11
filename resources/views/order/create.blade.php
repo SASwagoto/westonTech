@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-4 col-md-5">
+                        {{-- <div class="col-lg-4 col-md-5">
                             <div class="mb-3">
                                 <label for="customer" class="form-label text-primary">Select Customer</label>
                                 <select id="single-select" class="form-control" required>
@@ -35,33 +35,32 @@
                             <div class="mb-3">
                                 <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">Add New Customer</button>
                             </div>
-                        </div>
-                        <div class="col-lg-8 col-md-8 col-sm-12">
+                        </div> --}}
+                        <div class="col-lg-12 col-md-12 col-sm-12">
                             <div class="customer_details">
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="" class="form-label text-primary">Customer Name</label>
-                                            <input type="text" disabled class="form-control">
-                                            <input type="hidden" name="customer_id">
+                                            <label for="" class="form-label text-primary">Customer Phone</label>
+                                            <input class="form-control" type="tel" id="phone" name="phone" placeholder="e.g., 017XXXXXXXX" required>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="" class="form-label text-primary">Customer Phone</label>
-                                            <input type="text" disabled class="form-control">
+                                            <label for="" class="form-label text-primary">Customer Name</label>
+                                            <input type="text" name="name" id="name" required class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label for="" class="form-label text-primary">Customer Email</label>
-                                            <input type="text" disabled class="form-control">
+                                            <input class="form-control" type="email" name="email" id="email" value="{{old('email')}}" placeholder="Enter Customer Email">
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <label for="" class="form-label text-primary">Customer Address</label>
-                                            <input type="text" disabled class="form-control">
+                                            <input type="text" name="address" id="address" class="form-control" placeholder="Customer Address">
                                         </div>
                                     </div>
                                 </div>
@@ -87,6 +86,7 @@
                                         <th>#</th>
                                         <th>Product Name</th>
                                         <th>Serial No</th>
+                                        <th>Qty</th>
                                         <th>price</th>
                                         <th>remove</th>
                                     </tr>
@@ -96,11 +96,15 @@
                                         <tr>
                                             <th>{{ $key + 1 }}</th>
                                             <th><input readonly type="text" name="pname" class="form-control"
-                                                    value="{{ $item->pname ?? ''}}">
-                                                <input type="hidden" name="product_id[]" value="{{$item->pid}}">
-                                                </th>
+                                                    value="{{ $item->name ?? ''}}">
+                                                <input type="hidden" name="product_id[]" value="{{$item->id}}">
+                                            </th>
                                             <th><input readonly type="text" name="barcode[]" class="form-control"
-                                                    value="{{ $item->barcode ?? ''}}"></th>
+                                                    value="{{ $item->barcode ?? ''}}">
+                                            </th>
+                                            <th>
+                                                <input type="number" name="qty[]" min="1" value="1" class="form-control" required>
+                                            </th>
                                             <th>
                                                 <input type="number" name="sale_price[]" class="form-control" required>
                                             </th>
@@ -111,7 +115,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5">No Item Found</td>
+                                            <td colspan="6" class="text-center">No Item Found</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -241,14 +245,14 @@
         </script>
         <script>
             $(document).ready(function(){
-                $('#single-select').on('change', function(){
-                    var id = $(this).val();
+                $('#phone').on('keyup', function(){
+                    var phone = $(this).val();
                     var url = '{{route('getCustomer')}}';
                     $.ajax({
                             url: url,
                             method: 'GET',
                             data: {
-                                id: id
+                                phone: phone
                             },
                             success: function(response) {
                                 //console.log(response);

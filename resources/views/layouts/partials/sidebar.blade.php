@@ -63,10 +63,11 @@
                 </i>
                 <span class="nav-text">{{ __('menu.report') }}</span>
             </a>
-            <ul aria-expanded="false">
-                <li><a href="#">{{ __('menu.sale.report') }}</a></li>
-            </ul>
-        </li>
+                <ul aria-expanded="false">
+                    <li><a href="{{route('report.sale')}}">{{ __('menu.sale.report') }}</a></li>
+                    <li><a href="{{route('settings.trash')}}">{{ __('menu.trash') }}</a></li>
+                </ul>
+            </li>
              @endrole
          </ul>
      </div>
